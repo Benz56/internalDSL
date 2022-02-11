@@ -4,10 +4,7 @@ import main.metamodel.Machine;
 import main.metamodel.State;
 import main.metamodel.Transition;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StateMachine {
 
@@ -56,33 +53,55 @@ public class StateMachine {
         return this;
     }
 
-    public StateMachine set(String string, int i) {
-        integers.put(string, i);
+    public StateMachine set(String variable, int value) {
+        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+            transition.setOperationVariableName(variable);
+            transition.setOperationValue(value);
+            transition.setSetOperation(true);
+        });
         return this;
     }
 
-    public StateMachine increment(String string) {
-        integers.merge(string, 1, Integer::sum);
+    public StateMachine increment(String variable) {
+        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+            transition.setOperationVariableName(variable);
+            transition.setIncrementOperation(true);
+        });
         return this;
     }
 
-    public StateMachine decrement(String string) {
-        integers.merge(string, -1, Integer::sum);
+    public StateMachine decrement(String variable) {
+        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+            transition.setOperationVariableName(variable);
+            transition.setDecrementOperation(true);
+        });
         return this;
     }
 
-    public StateMachine ifEquals(String string, int i) {
-        // TODO Auto-generated method stub
+    public StateMachine ifEquals(String variable, int value) {
+        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+            transition.setConditionVariableName(variable);
+            transition.setConditionComparedValue(value);
+            transition.setConditionEqual(true);
+        });
         return this;
     }
 
-    public StateMachine ifGreaterThan(String string, int i) {
-        // TODO Auto-generated method stub
+    public StateMachine ifGreaterThan(String variable, int value) {
+        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+            transition.setConditionVariableName(variable);
+            transition.setConditionComparedValue(value);
+            transition.setConditionGreaterThan(true);
+        });
         return this;
     }
 
-    public StateMachine ifLessThan(String string, int i) {
-        // TODO Auto-generated method stub
+    public StateMachine ifLessThan(String variable, int value) {
+        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+            transition.setConditionVariableName(variable);
+            transition.setConditionComparedValue(value);
+            transition.setConditionLessThan(true);
+        });
         return this;
     }
 
