@@ -39,7 +39,7 @@ public class StateMachine {
     public StateMachine to(String target) {
         states.stream().filter(state -> state.getName().toString().equalsIgnoreCase(target)).findFirst().ifPresentOrElse(
                 state -> currentState.getTransitions().add(new Transition(currentTransitionEvent, state)),
-                () -> {
+                () -> { // If the target state does not exist we create it. This avoids more unnecessary intermediate object value creation caching.
                     final State state = new State(target);
                     states.add(state);
                     currentState.getTransitions().add(new Transition(currentTransitionEvent, state));

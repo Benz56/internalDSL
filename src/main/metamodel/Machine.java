@@ -7,7 +7,6 @@ public class Machine {
 
     private final List<State> states;
     private final State initialState;
-
     private final Map<String, Integer> integers;
 
     public Machine(final List<State> states, final State initialState, final Map<String, Integer> integers) {
@@ -32,12 +31,12 @@ public class Machine {
         return integers.keySet().size();
     }
 
-    // Manually added. Ok?
-    public Map<String, Integer> getIntegers() {
-        return integers;
-    }
-
     public boolean hasInteger(String string) {
         return integers.containsKey(string);
+    }
+
+    // Manually added for convenience.
+    public Map<String, Integer> getIntegers() {
+        return integers;
     }
 }

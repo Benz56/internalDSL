@@ -72,7 +72,7 @@ public class Transition {
         return setOperation || incrementOperation || decrementOperation;
     }
 
-    // Added setter operations for convenience.
+    // Added setter operations for convenience and to avoid an enormous constructor.
     public void setIncrementOperation(final boolean incrementOperation) {
         this.incrementOperation = incrementOperation;
     }

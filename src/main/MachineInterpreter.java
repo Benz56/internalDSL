@@ -4,7 +4,6 @@ import main.metamodel.Machine;
 import main.metamodel.State;
 import main.metamodel.Transition;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class MachineInterpreter {
@@ -22,56 +21,15 @@ public class MachineInterpreter {
     }
 
     public void processEvent(String event) {
-        final List<Transition> transitions = currentState.getTransitions().stream().filter(transition -> transition.getEvent().toString().equalsIgnoreCase(event)).collect(Collectors.toList());
-        for (final Transition transition : transitions) {
-            boolean executed = false;
-            if (transition.isConditional()) {
-                Integer value = machine.getIntegers().get(transition.getConditionVariableName().toString());
-                if (value != null) {
-                    if (transition.isConditionEqual()) {
-                        if (value.equals(transition.getConditionComparedValue())) {
-                            currentState = transition.getTarget();
-                            if (transition.hasSetOperation()) {
-                                machine.getIntegers().put(transition.getOperationVariableName().toString(), transition.getOperationValue());
-                            }
-                            if (transition.hasIncrementOperation() || transition.hasDecrementOperation()) {
-                                machine.getIntegers().merge(transition.getOperationVariableName().toString(), transition.hasIncrementOperation() ? 1 : -1, Integer::sum);
-                            }
-                            executed = true;
-                        }
-                    } else if (transition.isConditionGreaterThan()) {
-                        if (value > transition.getConditionComparedValue()) {
-                            currentState = transition.getTarget();
-                            if (transition.hasSetOperation()) {
-                                machine.getIntegers().put(transition.getOperationVariableName().toString(), transition.getOperationValue());
-                            }
-                            if (transition.hasIncrementOperation() || transition.hasDecrementOperation()) {
-                                machine.getIntegers().merge(transition.getOperationVariableName().toString(), transition.hasIncrementOperation() ? 1 : -1, Integer::sum);
-                            }
-                            executed = true;
-                        }
-                    } else if (transition.isConditionLessThan()) {
-                        if (value < transition.getConditionComparedValue()) {
-                            currentState = transition.getTarget();
-                            if (transition.hasSetOperation()) {
-                                machine.getIntegers().put(transition.getOperationVariableName().toString(), transition.getOperationValue());
-                            }
-                            if (transition.hasIncrementOperation() || transition.hasDecrementOperation()) {
-                                machine.getIntegers().merge(transition.getOperationVariableName().toString(), transition.hasIncrementOperation() ? 1 : -1, Integer::sum);
-                            }
-                            executed = true;
-                        }
-                    }
-                }
-                if (executed) break;
-            } else {
-                if (transition.hasSetOperation()) {
+        for (final Transition transition : currentState.getTransitions().stream().filter(transition -> transition.getEvent().toString().equalsIgnoreCase(event)).collect(Collectors.toList())) {
+            Integer value = transition.isConditional() ? machine.getIntegers().get(transition.getConditionVariableName().toString()) : null;
+            if (!transition.isConditional() || (value != null && (transition.isConditionEqual() && value.equals(transition.getConditionComparedValue()) ||
+                    transition.isConditionGreaterThan() && value > transition.getConditionComparedValue() ||
+                    transition.isConditionLessThan() && value < transition.getConditionComparedValue()))) {
+                if (transition.hasSetOperation())
                     machine.getIntegers().put(transition.getOperationVariableName().toString(), transition.getOperationValue());
-                }
-                if (transition.hasIncrementOperation() || transition.hasDecrementOperation()) {
+                if (transition.hasIncrementOperation() || transition.hasDecrementOperation())
                     machine.getIntegers().merge(transition.getOperationVariableName().toString(), transition.hasIncrementOperation() ? 1 : -1, Integer::sum);
-                }
-                System.out.println(transition.hasIncrementOperation());
                 currentState = transition.getTarget();
                 break;
             }
@@ -81,5 +39,4 @@ public class MachineInterpreter {
     public int getInteger(String string) {
         return machine.getIntegers().get(string);
     }
-
 }
