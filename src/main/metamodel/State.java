@@ -22,7 +22,6 @@ public class State {
     }
 
     public Transition getTransitionByEvent(String string) {
-        System.out.println(transitions.stream().map(Transition::getEvent).map(Object::toString).collect(Collectors.toList()));
         return transitions.stream().filter(transition -> transition.getEvent().toString().equalsIgnoreCase(string)).findFirst().orElse(null);
     }
 

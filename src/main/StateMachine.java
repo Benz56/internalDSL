@@ -54,7 +54,7 @@ public class StateMachine {
     }
 
     public StateMachine set(String variable, int value) {
-        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+        Optional.ofNullable(currentState.getTransitions().get(currentState.getTransitions().size() - 1)).ifPresent(transition -> {
             transition.setOperationVariableName(variable);
             transition.setOperationValue(value);
             transition.setSetOperation(true);
@@ -63,7 +63,7 @@ public class StateMachine {
     }
 
     public StateMachine increment(String variable) {
-        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+        Optional.ofNullable(currentState.getTransitions().get(currentState.getTransitions().size() - 1)).ifPresent(transition -> {
             transition.setOperationVariableName(variable);
             transition.setIncrementOperation(true);
         });
@@ -71,7 +71,7 @@ public class StateMachine {
     }
 
     public StateMachine decrement(String variable) {
-        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+        Optional.ofNullable(currentState.getTransitions().get(currentState.getTransitions().size() - 1)).ifPresent(transition -> {
             transition.setOperationVariableName(variable);
             transition.setDecrementOperation(true);
         });
@@ -79,7 +79,7 @@ public class StateMachine {
     }
 
     public StateMachine ifEquals(String variable, int value) {
-        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+        Optional.ofNullable(currentState.getTransitions().get(currentState.getTransitions().size() - 1)).ifPresent(transition -> {
             transition.setConditionVariableName(variable);
             transition.setConditionComparedValue(value);
             transition.setConditionEqual(true);
@@ -88,7 +88,7 @@ public class StateMachine {
     }
 
     public StateMachine ifGreaterThan(String variable, int value) {
-        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+        Optional.ofNullable(currentState.getTransitions().get(currentState.getTransitions().size() - 1)).ifPresent(transition -> {
             transition.setConditionVariableName(variable);
             transition.setConditionComparedValue(value);
             transition.setConditionGreaterThan(true);
@@ -97,12 +97,11 @@ public class StateMachine {
     }
 
     public StateMachine ifLessThan(String variable, int value) {
-        Optional.ofNullable(currentState.getTransitionByEvent(currentTransitionEvent)).ifPresent(transition -> {
+        Optional.ofNullable(currentState.getTransitions().get(currentState.getTransitions().size() - 1)).ifPresent(transition -> {
             transition.setConditionVariableName(variable);
             transition.setConditionComparedValue(value);
             transition.setConditionLessThan(true);
         });
         return this;
     }
-
 }
