@@ -10,9 +10,9 @@ import main.StateMachine;
 import main.metamodel.Machine;
 
 public class CDPlayerTest {
-	
+
 	public MachineInterpreter interpreter;
-	
+
 	@BeforeEach
 	public void init() {
 		StateMachine stateMachine = new StateMachine();
@@ -32,43 +32,41 @@ public class CDPlayerTest {
 						when("PLAY").to("PLAYING").
 						when("FORWARD").to("PAUSED").increment("track").ifLessThan("track", NUMBER_TRACKS + 1).
 						when("BACK").to("PAUSED").decrement("track").ifGreaterThan("track", 1).
-						
-						
 					build();
 		interpreter = new MachineInterpreter();
 		interpreter.run(m);
 	}
-	
+
 	@Test
 	public void playMusic() {
 		interpreter.processEvent("PLAY");
 		assertEquals(1, interpreter.getInteger("track"));
 		assertEquals("PLAYING", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("TRACK_END");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("PLAYING", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("STOP");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("STOP", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("PLAY");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("PLAYING", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("PAUSE");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("PAUSED", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("BACK");
 		assertEquals(1, interpreter.getInteger("track"));
 		assertEquals("PAUSED", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("FORWARD");
 		assertEquals(2, interpreter.getInteger("track"));
 		assertEquals("PAUSED", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("FORWARD");
 		interpreter.processEvent("FORWARD");
 		interpreter.processEvent("FORWARD");
@@ -79,15 +77,15 @@ public class CDPlayerTest {
 		interpreter.processEvent("FORWARD");
 		assertEquals(10, interpreter.getInteger("track"));
 		assertEquals("PAUSED", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("PLAY");
 		assertEquals(10, interpreter.getInteger("track"));
 		assertEquals("PLAYING", interpreter.getCurrentState().getName());
-		
+
 		interpreter.processEvent("TRACK_END");
 		assertEquals(10, interpreter.getInteger("track"));
 		assertEquals("STOP", interpreter.getCurrentState().getName());
-		
-		
+
+
 	}
 }

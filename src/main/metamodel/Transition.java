@@ -2,14 +2,20 @@ package main.metamodel;
 
 public class Transition {
 
+	private final String event;
+	private final State targetState;
+
+	public Transition(final String event, final State targetState) {
+		this.event = event;
+		this.targetState = targetState;
+	}
+
 	public Object getEvent() {
-		// TODO Auto-generated method stub
-		return null;
+		return event;
 	}
 
 	public State getTarget() {
-		// TODO Auto-generated method stub
-		return null;
+		return targetState;
 	}
 
 	public boolean hasSetOperation() {
